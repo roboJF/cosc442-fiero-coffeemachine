@@ -62,4 +62,40 @@ public class CoffeeMakerTest {
         assertTrue(maker.addRecipe(r));
         assertSame(r, maker.getRecipes()[0]);
     }
+
+    //checks that recipes with duplicate names are rejected
+    @Test
+    public void addRecipeRejectsDuplicateName(){
+        assertTrue(maker.addRecipe(recipe("Latte", 10, 1, 1, 1, 1)));
+        assertFalse(maker.addRecipe(recipe("Latte", 20, 5, 6, 5, 6)));
+        assertNotNull(maker.getRecipeForName("Latte"));
+    }
+    
+    //checks that the four recipe limit is enforced
+    @Test
+    public void addRecipeFillsFourSlotsAndNotFive(){
+        fillSlots();
+        assertFalse(maker.addRecipe(recipe("Fifth")));
+        //syntax of doom and despair
+        for (int i = 0; i < 4; i++){
+            assertEquals("Recipe" + i, maker.getRecipeForName("Recipe" + i).getName());
+        }
+        assertNull(maker.getRecipeForName("Fifth").getName());
+    }
+
+    //checks to make sure that deleting nonexistant recipes wont delete, well, nothing (this is very important)
+    @Test
+    public void deleteRecipeDeniesNullOrMissing(){
+        assertFalse(maker.deleteRecipe(null));
+        assertFalse(maker.deleteRecipe(recipe("Nonexistant Latte")));
+    }
+
+    //checks that a deleted recipe is, well, deleted
+    @Test
+    public void deleteRecipeRemovesARecipe(){
+        Recipe latte = recipe("Latte");
+        assertTrue(maker.addRecipe(latte));
+        assertTrue(maker.deleteRecipe(latte));
+        assertNull(maker.getRecipeForName("Latte").getName());
+    }
 }
