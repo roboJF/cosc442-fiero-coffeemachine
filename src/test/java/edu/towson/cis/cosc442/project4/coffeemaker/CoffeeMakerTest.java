@@ -162,4 +162,65 @@ public class CoffeeMakerTest {
         assertEquals(18, maker.checkInventory().getSugar());
         assertEquals(19, maker.checkInventory().getChocolate());
     }
+
+    //checks to make sure that addInventory accepts zero as an amount
+    @Test
+    public void addInventoryAcceptsZero(){
+        assertTrue(maker.addInventory(0, 0, 0, 0));
+        assertEquals(15, maker.checkInventory().getCoffee());
+        assertEquals(15, maker.checkInventory().getMilk());
+        assertEquals(15, maker.checkInventory().getSugar());
+        assertEquals(15, maker.checkInventory().getChocolate());
+    }
+
+    //checks that negative coffee is rejected w/o changing inventory
+    @Test
+    public void addInventoryRejectsNegativeCoffee(){
+        assertFalse(maker.addInventory(-3, 1, 1, 1));
+        assertEquals(15, maker.checkInventory().getCoffee());
+        assertEquals(15, maker.checkInventory().getMilk());
+        assertEquals(15, maker.checkInventory().getSugar());
+        assertEquals(15, maker.checkInventory().getChocolate());
+    }
+
+    //checks that negative milk is rejected w/o changing inventory
+    @Test
+    public void addInventoryRejectsNegativeMilk(){
+        assertFalse(maker.addInventory(1, -5, 1, 1));
+        assertEquals(15, maker.checkInventory().getCoffee());
+        assertEquals(15, maker.checkInventory().getMilk());
+        assertEquals(15, maker.checkInventory().getSugar());
+        assertEquals(15, maker.checkInventory().getChocolate());
+    }
+
+    //checks that negative sugar is rejected w/o changing inventory
+    @Test
+    public void addInventoryRejectsNegativeSugar(){
+        assertFalse(maker.addInventory(1, 1, -4, 1));
+        assertEquals(15, maker.checkInventory().getCoffee());
+        assertEquals(15, maker.checkInventory().getMilk());
+        assertEquals(15, maker.checkInventory().getSugar());
+        assertEquals(15, maker.checkInventory().getChocolate());
+    }
+
+    //checks that negative chocolate is rejected w/o changing inventory
+    @Test
+    public void addInventoryRejectsNegativeChocolate(){
+        assertFalse(maker.addInventory(1, 1, 1, -2));
+        assertEquals(15, maker.checkInventory().getCoffee());
+        assertEquals(15, maker.checkInventory().getMilk());
+        assertEquals(15, maker.checkInventory().getSugar());
+        assertEquals(15, maker.checkInventory().getChocolate());
+    }
+
+    //checks to make sure that makeCoffee properly returns change
+    @Test
+    public void makeCoffeeReturnsForOverpay(){
+        Recipe recipe = recipe("Latte", 10, 2, 3, 4, 5);
+        assertEquals(2, maker.makeCoffee(recipe, 12));
+        assertEquals(13, maker.checkInventory().getCoffee());
+        assertEquals(12, maker.checkInventory().getMilk());
+        assertEquals(11, maker.checkInventory().getSugar());
+        assertEquals(10, maker.checkInventory().getChocolate());
+    }
 }
