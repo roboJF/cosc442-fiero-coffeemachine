@@ -1,12 +1,9 @@
 package edu.towson.cis.cosc442.project4.coffeemaker;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+
 
 public class CoffeeMakerTest {
     private CoffeeMaker maker;
@@ -222,5 +219,54 @@ public class CoffeeMakerTest {
         assertEquals(12, maker.checkInventory().getMilk());
         assertEquals(11, maker.checkInventory().getSugar());
         assertEquals(10, maker.checkInventory().getChocolate());
+    }
+
+    //checks to make sure that coffee can be bought at exact price
+    @Test
+    public void makeCoffeeAtExactPrice(){
+        Recipe recipe = recipe("Latte", 10, 3, 4, 5, 0);
+        assertEquals(0, maker.makeCoffee(recipe, 10));
+        assertEquals(12, maker.checkInventory().getCoffee());
+        assertEquals(11, maker.checkInventory().getMilk());
+        assertEquals(10, maker.checkInventory().getSugar());
+        assertEquals(15, maker.checkInventory().getChocolate());
+    }
+
+    //checks to make sure that coffee made with insufficient balance wont be made, and money will be returned
+    @Test 
+    public void makeCoffeeReturnsInsufficientPayment(){
+        Recipe recipe = recipe("Latte", 10, 2, 3, 4, 5);
+        assertEquals(9, maker.makeCoffee(recipe, 9));
+        assertEquals(15, maker.checkInventory().getCoffee());
+        assertEquals(15, maker.checkInventory().getMilk());
+        assertEquals(15, maker.checkInventory().getSugar());
+        assertEquals(15, maker.checkInventory().getChocolate());
+    }
+
+    //checks that payment will be returned, and inventory wont change if coffee is trying to be made with insufficient ingredients
+    @Test
+    public void makeCoffeeReturnsPaymentOnInsuffientIngredients(){
+        Recipe recipe = recipe("Latte", 10, 2, 3, 24, 5);
+        assertEquals(10, maker.makeCoffee(recipe, 10));
+        assertEquals(15, maker.checkInventory().getCoffee());
+        assertEquals(15, maker.checkInventory().getMilk());
+        assertEquals(15, maker.checkInventory().getSugar());
+        assertEquals(15, maker.checkInventory().getChocolate());
+    }
+
+    //checks that coffee will still be made if ingredients will be 0 afterwards
+    @Test
+    public void makeCoffeeAtInventoryBoundary(){
+        Inventory inv = maker.checkInventory();
+        inv.setCoffee(3);
+        inv.setMilk(5);
+        inv.setSugar(2);
+        inv.setChocolate(1);
+        Recipe recipe = recipe("Exact", 10, 3, 5, 2,1);
+        assertEquals(0, maker.makeCoffee(recipe, 10));
+        assertEquals(0, inv.getCoffee());
+        assertEquals(0, inv.getMilk());
+        assertEquals(0, inv.getSugar());
+        assertEquals(0, inv.getChocolate());
     }
 }
