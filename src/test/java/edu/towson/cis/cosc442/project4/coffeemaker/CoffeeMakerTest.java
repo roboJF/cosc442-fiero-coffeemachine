@@ -118,4 +118,48 @@ public class CoffeeMakerTest {
         assertSame(newRecipe, maker.getRecipeForName("Latte"));
         assertEquals(20, maker.getRecipeForName("Latte").getPrice());
     }
+
+    //checks that editing a recipe can change its name
+    @Test
+    public void editRecipeCanChangeName(){
+        Recipe recipe = recipe("Old Latte");
+        Recipe newRecipe = recipe("New Latte");
+        assertTrue(maker.addRecipe(recipe));
+        assertTrue(maker.editRecipe(recipe, newRecipe));
+        assertNull(maker.getRecipeForName("Old Latte").getName());
+        assertSame(newRecipe, maker.getRecipeForName("New Latte"));
+    }
+
+    //checks that editing recipe wont affect other recipes
+    @Test
+    public void editRecipeDoesNotChangeOtherRecipes(){
+        Recipe recipe = recipe("Latte");
+        Recipe recipe2 = recipe("Other Latte");
+        assertTrue(maker.addRecipe(recipe));
+        assertTrue(maker.addRecipe(recipe2));
+        assertFalse(maker.editRecipe(recipe("Missing Latte"), recipe2));
+        assertSame(recipe, maker.getRecipeForName("Latte"));
+        assertSame(recipe2, maker.getRecipeForName("Other Latte"));
+    }
+
+    //checks that editRecipe works with 4 occupied slots
+    @Test
+    public void editRecipeWorksWithOccupiedSlots(){
+        fillSlots();
+        Recipe recipe = maker.getRecipeForName("Recipe0");
+        Recipe newRecipe = recipe("Recipe0", 20, 1, 1, 1, 1);
+        assertTrue(maker.editRecipe(recipe, newRecipe));
+        assertSame(newRecipe, maker.getRecipeForName("Recipe0"));
+        assertEquals(20, maker.getRecipeForName("Recipe0").getPrice());
+    }
+
+    //checks to make sure that addInventory accepts positive amounts
+    @Test
+    public void addInventoryAcceptsPositive(){
+        assertTrue(maker.addInventory(1, 2, 3, 4));
+        assertEquals(16, maker.checkInventory().getCoffee());
+        assertEquals(17, maker.checkInventory().getMilk());
+        assertEquals(18, maker.checkInventory().getSugar());
+        assertEquals(19, maker.checkInventory().getChocolate());
+    }
 }
