@@ -46,7 +46,7 @@ public class CoffeeMaker {
             for (int i = 0; i < NUM_RECIPES; i++) {
                 if (!recipeFull[i]) {
                     emptySpot = i;
-                    canAddRecipe = true;
+                    break;
                 }
             }
             if (emptySpot != -1) {

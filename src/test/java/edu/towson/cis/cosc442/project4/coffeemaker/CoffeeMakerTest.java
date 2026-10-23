@@ -39,6 +39,7 @@ public class CoffeeMakerTest {
         }
     }
 
+    //checks that a maker has 4 empty recipe slots, and 15 of everything
     @Test
     public void constructorCreatesEmptySlotsAndCorrectInventory(){
         Recipe[] recipes = maker.getRecipes();
@@ -51,5 +52,14 @@ public class CoffeeMakerTest {
         assertEquals(15, maker.checkInventory().getMilk());
         assertEquals(15, maker.checkInventory().getSugar());
         assertEquals(15, maker.checkInventory().getChocolate());
+    }
+
+    //checks that a recipe goes into the first avaliable slot
+    @Test
+    public void addRecipeUsesFirstSlot(){
+        //i know next to nothing about coffee, so prepare for everything to be named latte lol
+        Recipe r = recipe("Latte");
+        assertTrue(maker.addRecipe(r));
+        assertSame(r, maker.getRecipes()[0]);
     }
 }
