@@ -65,7 +65,7 @@ public class InventoryTest {
         assertEquals(expected, inventory.getChocolate());
     }
 
-    //checks to make sure inventory has correct amount of ingredients for different recipies
+    //checks to make sure inventory has correct amount of ingredients for different recipes
     @ParameterizedTest
     @CsvSource({
         "1, 2, 3, 4, true",
