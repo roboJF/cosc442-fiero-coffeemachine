@@ -24,7 +24,7 @@ public class CoffeeMakerTest {
         r.setAmtCoffee(coffee);
         r.setAmtMilk(milk);
         r.setAmtSugar(sugar);
-        r.setAmtCoffee(chocolate);
+        r.setAmtChocolate(chocolate);
         return r;
     }
 
