@@ -38,4 +38,18 @@ public class CoffeeMakerTest {
             assertTrue(maker.addRecipe(recipe("Recipe" + i)));
         }
     }
+
+    @Test
+    public void constructorCreatesEmptySlotsAndCorrectInventory(){
+        Recipe[] recipes = maker.getRecipes();
+        assertEquals(4, recipes.length);
+        for (Recipe r : recipes){
+            assertNotNull(r);
+            assertNull(r.getName());
+        }
+        assertEquals(15, maker.checkInventory().getCoffee());
+        assertEquals(15, maker.checkInventory().getMilk());
+        assertEquals(15, maker.checkInventory().getSugar());
+        assertEquals(15, maker.checkInventory().getChocolate());
+    }
 }
