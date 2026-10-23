@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -97,5 +98,24 @@ public class CoffeeMakerTest {
         assertTrue(maker.addRecipe(latte));
         assertTrue(maker.deleteRecipe(latte));
         assertNull(maker.getRecipeForName("Latte").getName());
+    }
+
+    //checks that deleting a recipe actually frees the slot up
+    @Test
+    public void deletionFromFullMachineFreesSlot(){
+        fillSlots();
+        assertTrue(maker.deleteRecipe(maker.getRecipeForName("Recipe1")));
+        assertTrue(maker.addRecipe(recipe("New Latte")));
+    }
+
+    //checks that a recipe can be updated without changing its name
+    @Test
+    public void editRecipeWithSameNameAndSpace(){
+        Recipe recipe = recipe("Latte", 10, 1, 1, 1, 1);
+        Recipe newRecipe = recipe("Latte", 20, 1, 1, 1, 1);
+        assertTrue(maker.addRecipe(recipe));
+        assertTrue(maker.editRecipe(recipe, newRecipe));
+        assertSame(newRecipe, maker.getRecipeForName("Latte"));
+        assertEquals(20, maker.getRecipeForName("Latte").getPrice());
     }
 }
