@@ -30,4 +30,7 @@ jobs:
 
       # Add PIT mutation testing later
 
+      - name: Run PIT mutation testing
+        run: ./mvnw test-compile org.pitest:pitest-maven:mutationCoverage
+
       # Add PIT report artifact upload later
